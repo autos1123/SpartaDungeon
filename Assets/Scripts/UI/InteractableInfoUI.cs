@@ -1,26 +1,33 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
-/// <summary>
-/// 텍스트 UI에 조사 대상 정보를 표시하는 스크립트
-/// </summary>
 public class InteractableInfoUI : MonoBehaviour
 {
     public TextMeshProUGUI infoText;
+    private Coroutine hideCoroutine;
 
-    /// <summary>
-    /// 텍스트 표시
-    /// </summary>
-    public void ShowInfo(string objectName, string description)
+    public void ShowInfo(string name, string desc, float duration = 0f)
     {
-        infoText.text = $"<b>{objectName}</b>\n{description}";
+        infoText.text = $"{name}\n{desc}";
+
+        if (duration > 0f)
+        {
+            if (hideCoroutine != null)
+                StopCoroutine(hideCoroutine);
+
+            hideCoroutine = StartCoroutine(AutoHide(duration));
+        }
     }
 
-    /// <summary>
-    /// 텍스트 숨김
-    /// </summary>
     public void HideInfo()
     {
         infoText.text = "";
+    }
+
+    private IEnumerator AutoHide(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HideInfo();
     }
 }
