@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private float currentHealth;
 
     public HealthBarUI healthUI; // 인스펙터에서 연결
+    public bool invincible = false;
 
     private PlayerControls inputActions;       // Input System에서 자동 생성된 입력 클래스
     private Rigidbody rb;                      // Rigidbody 컴포넌트 참조
@@ -110,6 +111,12 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        healthUI.SetHealth(currentHealth, maxHealth);
+    }
+    public void Heal(float amount)
+    {
+        currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthUI.SetHealth(currentHealth, maxHealth);
     }
