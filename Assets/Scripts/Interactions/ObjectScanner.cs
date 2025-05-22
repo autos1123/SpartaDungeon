@@ -15,9 +15,9 @@ public class ObjectScanner : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scanMask))
         {
             var target = hit.collider.GetComponent<InspectableObject>();
-            if (target != null)
+            if (target != null && target.data != null)
             {
-                ui.ShowInfo(target.objectName, target.description);
+                ui.ShowInfo(target.GetName(), target.GetDescription());
                 return;
             }
         }

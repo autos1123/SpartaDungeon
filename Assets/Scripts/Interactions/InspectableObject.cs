@@ -1,10 +1,12 @@
 using UnityEngine;
 
 /// <summary>
-/// 조사 가능한 오브젝트에 부착되는 정보 컴포넌트
+/// 이 오브젝트는 ItemData ScriptableObject를 참조해 정보를 전달합니다.
 /// </summary>
 public class InspectableObject : MonoBehaviour
 {
-    public string objectName = "???";
-    [TextArea] public string description = "설명이 없습니다.";
+    public ItemData data;
+
+    public string GetName() => data?.itemName ?? "???";
+    public string GetDescription() => data?.description ?? "설명이 없습니다.";
 }

@@ -1,0 +1,9 @@
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "SpartaDungeon/Item Data")]
+public class ItemData : ScriptableObject
+{
+    public string itemName;
+    [TextArea] public string description;
+    public Sprite icon; // 향후 UI에 이미지 넣고 싶을 때 사용
+}
