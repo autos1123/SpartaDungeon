@@ -2,68 +2,82 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// 플레이어의 이동과 점프를 처리하는 컨트롤러 스크립트입니다.
-/// Input System을 사용하여 입력을 받고, Rigidbody를 이용해 물리 기반 이동을 구현합니다.
+/// 플레이어의 이동 및 점프, 그리고 카메라 방향에 따른 회전을 처리하는 컨트롤러입니다.
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerControls inputActions; // InputActions 클래스 인스턴스
-    private Rigidbody rb; // Rigidbody 컴포넌트 참조
+    private PlayerControls inputActions;       // Input System에서 자동 생성된 입력 클래스
+    private Rigidbody rb;                      // Rigidbody 컴포넌트 참조
 
     [Header("Movement Settings")]
-    public float moveSpeed = 5f; // 이동 속도
-    public float jumpForce = 7f; // 점프 힘
+    public float moveSpeed = 5f;               // 이동 속도
+    public float jumpForce = 7f;               // 점프 힘
 
-    private Vector2 moveInput; // 2D 입력값 (WASD 등)
-    private bool isJumpPressed; // 점프 입력 여부
+    private Vector2 moveInput;                 // Input System으로부터 받은 이동 입력 (Vector2)
+    private bool isJumpPressed;                // 점프 입력 여부
+
+    [Header("Camera")]
+    public Transform cameraTransform;          // 카메라 Transform (Cinemachine FreeLook Camera)
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>(); // Rigidbody 컴포넌트 가져오기
-        inputActions = new PlayerControls(); // Input Actions 인스턴스 생성
+        rb = GetComponent<Rigidbody>();        // Rigidbody 가져오기
+        inputActions = new PlayerControls();   // Input Actions 클래스 초기화
     }
 
     private void OnEnable()
     {
-        // 입력 시스템 활성화
-        inputActions.Player.Enable();
+        inputActions.Player.Enable();          // 입력 활성화
 
-        // 이동 입력 처리
+        // 이동 입력 설정
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
 
-        // 점프 입력 처리
+        // 점프 입력 설정
         inputActions.Player.Jump.performed += _ => isJumpPressed = true;
     }
 
     private void OnDisable()
     {
-        // 입력 시스템 비활성화
-        inputActions.Player.Disable();
+        inputActions.Player.Disable();         // 입력 비활성화
     }
 
     private void FixedUpdate()
     {
-        // 2D 입력을 3D 이동 방향으로 변환
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * moveSpeed;
+        // 카메라 방향 기준으로 입력 방향 변환
+        Vector3 camForward = cameraTransform.forward; // 카메라의 전방 벡터
+        Vector3 camRight = cameraTransform.right;     // 카메라의 오른쪽 벡터
 
-        // Y 속도는 유지하고 XZ 방향만 변경
+        camForward.y = 0f;        // 수평 방향만 사용 (상하 무시)
+        camRight.y = 0f;
+        camForward.Normalize();   // 방향 정규화
+        camRight.Normalize();
+
+        // 최종 이동 벡터 계산 (카메라 기준 방향에 따라 이동)
+        Vector3 move = (camRight * moveInput.x + camForward * moveInput.y).normalized * moveSpeed;
+
+        // 현재 수직 속도는 유지하고 XZ 방향 속도만 변경
         rb.velocity = new Vector3(move.x, rb.velocity.y, move.z);
+
+        // 이동 방향이 있을 경우 회전 (카메라 기준 방향으로 자연스럽게 회전)
+        if (move != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up); // 바라볼 방향
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime); // 부드럽게 회전
+        }
 
         // 점프 처리
         if (isJumpPressed && IsGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // 점프 힘 적용
         }
 
-        isJumpPressed = false; // 점프는 1회성 입력이므로 초기화
+        isJumpPressed = false; // 점프는 1회 입력만 처리
     }
 
     /// <summary>
-    /// 바닥에 닿아 있는지 확인하는 함수
+    /// 바닥에 닿았는지 Raycast로 체크
     /// </summary>
-    /// <returns>Raycast를 통해 Ground 여부 반환</returns>
     private bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
