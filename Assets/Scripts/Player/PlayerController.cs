@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// 플레이어의 이동 및 점프, 그리고 카메라 방향에 따른 회전을 처리하는 컨트롤러입니다.
-/// </summary>
+
+// 플레이어의 이동 및 점프, 그리고 카메라 방향에 따른 회전을 처리하는 컨트롤러입니다.
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Health")]
@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
 
     public HealthBarUI healthUI; // 인스펙터에서 연결
     public bool invincible = false;
+    [Header("Stamina or UI")]
+    public PlayerStamina stamina;              // 스태미나 컴포넌트 참조
+    public InteractableInfoUI infoUI;          // 설명 표시 UI (텍스트 메시지용)
 
     private PlayerControls inputActions;       // Input System에서 자동 생성된 입력 클래스
     private Rigidbody rb;                      // Rigidbody 컴포넌트 참조
@@ -20,8 +23,12 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;               // 이동 속도
     public float jumpForce = 7f;               // 점프 힘
 
+    [Header("Sprint Settings")]
+    public float sprintSpeed = 9f;            // 대시 시 이동 속도
+    public float staminaDrainRate = 10f;      // 초당 스태미나 소모량
+    private bool isSprinting = false;         // 현재 대시 중 여부
+
     private Vector2 moveInput;                 // Input System으로부터 받은 이동 입력 (Vector2)
-    private bool isJumpPressed;                // 점프 입력 여부
 
     [Header("Camera")]
     public Transform cameraTransform;          // 카메라 Transform (Cinemachine FreeLook Camera)
@@ -45,8 +52,30 @@ public class PlayerController : MonoBehaviour
         {
             TakeDamage(10f); // H 키 누르면 체력 10 깎임
         }
-    }
+        // 스페이스바 입력 시
+        // 점프 입력 처리 → 스태미나 포함 조건 체크
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            Debug.Log("[PlayerController] 스페이스바 입력 감지됨");
 
+            if (IsGrounded())
+            {
+                if (stamina.ConsumeStamina(15f))
+                {
+                    Jump(); // ← 여기서만 점프 실행
+                }
+                else
+                {
+                    infoUI?.ShowInfo("스태미나 부족", "점프할 수 없습니다.", 1.5f);
+                }
+            }
+        }
+        // Shift 누르면 대시 시작
+        if (Keyboard.current.leftShiftKey.isPressed)
+            isSprinting = true;
+        else
+            isSprinting = false;
+    }
     private void OnEnable()
     {
         inputActions.Player.Enable();          // 입력 활성화
@@ -54,65 +83,71 @@ public class PlayerController : MonoBehaviour
         // 이동 입력 설정
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
-
-        // 점프 입력 설정
-        inputActions.Player.Jump.performed += _ => isJumpPressed = true;
     }
-
     private void OnDisable()
     {
         inputActions.Player.Disable();         // 입력 비활성화
     }
-
     private void FixedUpdate()
     {
-        // 카메라 방향 기준으로 입력 방향 변환
-        Vector3 camForward = cameraTransform.forward; // 카메라의 전방 벡터
-        Vector3 camRight = cameraTransform.right;     // 카메라의 오른쪽 벡터
-
-        camForward.y = 0f;        // 수평 방향만 사용 (상하 무시)
+        // 카메라 방향 기준 방향 계산
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+        camForward.y = 0f;
         camRight.y = 0f;
-        camForward.Normalize();   // 방향 정규화
+        camForward.Normalize();
         camRight.Normalize();
 
-        // 최종 이동 벡터 계산 (카메라 기준 방향에 따라 이동)
-        Vector3 move = (camRight * moveInput.x + camForward * moveInput.y).normalized * moveSpeed;
+        // 입력 방향 계산
+        Vector3 moveDir = (camRight * moveInput.x + camForward * moveInput.y).normalized;
 
-        // 현재 수직 속도는 유지하고 XZ 방향 속도만 변경
-        rb.velocity = new Vector3(move.x, rb.velocity.y, move.z);
+        float currentSpeed = moveSpeed;
 
-        // 이동 방향이 있을 경우 회전 (카메라 기준 방향으로 자연스럽게 회전)
-        if (move != Vector3.zero)
+        // ▶ 스프린트 조건일 때 속도 증가 + 스태미나 소모
+        if (isSprinting && stamina.currentStamina > 0f)
         {
-            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up); // 바라볼 방향
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime); // 부드럽게 회전
+            float drain = staminaDrainRate * Time.fixedDeltaTime;
+            stamina.ConsumeStamina(drain);
+            currentSpeed = sprintSpeed;
+        }
+        else if (isSprinting && stamina.currentStamina <= 0f)
+        {
+            // 스태미나 부족 시 스프린트 강제 종료
+            infoUI?.ShowInfo("스태미나 부족", "달릴 수 없습니다", 1.5f);
+            isSprinting = false;
         }
 
-        // 점프 처리
-        if (isJumpPressed && IsGrounded())
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // 점프 힘 적용
-        }
+        // 이동 적용
+        Vector3 finalVelocity = moveDir * currentSpeed;
+        rb.velocity = new Vector3(finalVelocity.x, rb.velocity.y, finalVelocity.z);
 
-        isJumpPressed = false; // 점프는 1회 입력만 처리
+        // 회전
+        if (moveDir != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 10f * Time.deltaTime);
+        }
     }
 
-    /// <summary>
-    /// 바닥에 닿았는지 Raycast로 체크
-    /// </summary>
     private bool IsGrounded()
     {
+        // 바닥에 닿았는지 Raycast로 체크
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
-
-    /// <summary>
-    /// 데미지 주는 방식
-    /// </summary>
     public void TakeDamage(float damage)
     {
+        // 데미지 주는 방식
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthUI.SetHealth(currentHealth, maxHealth);
+    }
+    void Jump()
+    {
+        // 플레이어 점프 실행 함수
+        Debug.Log("[PlayerController] Jump() 실행됨");
+        // 기존 y속도 제거 후 점프력 적용
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     public void Heal(float amount)
     {
