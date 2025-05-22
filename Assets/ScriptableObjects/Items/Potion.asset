@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   itemName: HealingPotion
-  description: "\uCCB4\uB825\uC774 \uD68C\uBCF5\uB41C\uB2E4."
+  description: Heal (+30)
   icon: {fileID: 0}
   effectType: 0
   effectValue: 30
