@@ -6,6 +6,12 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    [Header("Health")]
+    public float maxHealth = 100f;
+    private float currentHealth;
+
+    public HealthBarUI healthUI; // 인스펙터에서 연결
+
     private PlayerControls inputActions;       // Input System에서 자동 생성된 입력 클래스
     private Rigidbody rb;                      // Rigidbody 컴포넌트 참조
 
@@ -23,6 +29,21 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();        // Rigidbody 가져오기
         inputActions = new PlayerControls();   // Input Actions 클래스 초기화
+    }
+    private void Start()
+    {
+        // 게임 시작 시 체력을 최대치로 초기화
+        currentHealth = maxHealth;
+
+        // UI에 초기 체력 상태 반영
+        healthUI.SetHealth(currentHealth, maxHealth);
+    }
+    private void Update()
+    {
+        if (Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            TakeDamage(10f); // H 키 누르면 체력 10 깎임
+        }
     }
 
     private void OnEnable()
@@ -81,5 +102,15 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
+    }
+
+    /// <summary>
+    /// 데미지 주는 방식
+    /// </summary>
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        healthUI.SetHealth(currentHealth, maxHealth);
     }
 }
