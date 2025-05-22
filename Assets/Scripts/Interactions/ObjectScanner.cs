@@ -12,18 +12,25 @@ public class ObjectScanner : MonoBehaviour
     void Update()
     {
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.green);
 
         if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scanMask))
         {
             var target = hit.collider.GetComponent<InspectableObject>();
-
-            if (target != null && target.data != null)
+            if (target != null)
             {
-                if (currentTarget != target)
+                //  아이템이면 itemData의 조사 설명 출력
+                if (target.TryGetComponent(out ItemPickup pickup) && pickup.itemData != null)
                 {
-                    currentTarget = target;
-                    ui.ShowInfo(target.GetName(), target.GetDescription());
+                    var item = pickup.itemData;
+                    ui.ShowInfo(item.itemName, item.inspectDescription);
                 }
+                else
+                {
+                    // 일반 InspectableObject용
+                    ui.ShowInfo(target.GetName(), target.GetInspecDescription());
+                }
+
                 return;
             }
         }

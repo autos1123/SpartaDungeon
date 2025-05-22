@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   itemName: HealingPotion
-  description: Heal (+30)
-  icon: {fileID: 0}
+  inspectDescription: "\uD68C\uBCF5\uC544\uC774\uD15C\uC774\uB2E4."
+  pickupMessage: Heal! (+30)
   effectType: 0
   effectValue: 30
   duration: 0

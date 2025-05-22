@@ -22,7 +22,7 @@ public class ItemPickup : MonoBehaviour
                 if (infoUI != null)
                 {
                     // 설명창에 이름 + 설명 표시 (2초간)
-                    infoUI.ShowInfo(itemData.itemName, itemData.description, 2f);
+                    infoUI.ShowInfo(itemData.itemName, itemData.pickupMessage, 2f);
                 }
 
                 Destroy(gameObject); // 아이템 오브젝트 제거

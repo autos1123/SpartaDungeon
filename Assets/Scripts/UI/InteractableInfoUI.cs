@@ -15,7 +15,7 @@ public class InteractableInfoUI : MonoBehaviour
             return;
         }
 
-        infoText.text = $"{name}\n{desc}";
+        infoText.text = desc;
         Debug.Log($"[ShowInfo] {infoText.text} (duration: {duration})");
 
         // 기존 코루틴이 실행 중이면 중단

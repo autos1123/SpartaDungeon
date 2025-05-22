@@ -8,5 +8,6 @@ public class InspectableObject : MonoBehaviour
     public ItemData data;
 
     public string GetName() => data?.itemName ?? "???";
-    public string GetDescription() => data?.description ?? "설명이 없습니다.";
+    public string GetInspecDescription() => data?.inspectDescription ?? "설명이 없습니다.";
+    public string GetPickupMessage() => data?.pickupMessage ?? "획득 설명이 없습니다.";
 }
