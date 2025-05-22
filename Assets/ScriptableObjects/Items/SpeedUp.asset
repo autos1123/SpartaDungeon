@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acecc69b8b49d34fa101fc6059e7ad9, type: 3}
   m_Name: SpeedUp
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemName: SpeedUp
+  description: "\uC18D\uB3C4\uAC00 \uBE68\uB77C\uC9C4\uB2E4."
   icon: {fileID: 0}
+  effectType: 1
+  effectValue: 3
+  duration: 7

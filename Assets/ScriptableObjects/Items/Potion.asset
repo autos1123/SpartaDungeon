@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acecc69b8b49d34fa101fc6059e7ad9, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemName: HealingPotion
+  description: "\uCCB4\uB825\uC774 \uD68C\uBCF5\uB41C\uB2E4."
   icon: {fileID: 0}
+  effectType: 0
+  effectValue: 30
+  duration: 0
