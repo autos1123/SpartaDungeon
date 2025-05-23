@@ -39,7 +39,44 @@ Unity를 사용해 구현한 3D 게임 과제입니다. 기본적인 캐릭터 �
   - 양 방향 이동, 캐릭터 탑승 시 자연스러운 따라가기 구현
 
 - **Input 방식 비교 실험**
-  - `SendMessage()` vs `UnityEvent.Invoke()` 방식 비교 테스트용 스크립트 구현
+  - `SendMessage()` vs `UnityEvent.Invoke()` 방식 비교 테스트용 예제 구현
+
+```csharp
+// SendMessage 방식 예제
+public class SendMessageInput : MonoBehaviour {
+    public GameObject target;
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+            target.SendMessage("OnJump", SendMessageOptions.DontRequireReceiver);
+    }
+}
+
+public class Receiver : MonoBehaviour {
+    public void OnJump() {
+        Debug.Log("[SendMessage] 점프 실행됨");
+    }
+}
+```
+
+```csharp
+// UnityEvent 방식 예제
+using UnityEngine;
+using UnityEngine.Events;
+
+public class EventInput : MonoBehaviour {
+    public UnityEvent onJump;
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+            onJump.Invoke();
+    }
+}
+```
+
+- **비교 요약**
+  - `SendMessage`: 문자열 기반 호출 → 오타에 취약하고 유지보수 어려움
+  - `UnityEvent`: 컴파일 타임 안전성 보장, 인스펙터에서 이벤트 연결 가능
+  - 실전 구조에는 UnityEvent 방식이 더 안정적이고 권장됨
+  - 본 프로젝트에서는 테스트 스크립트로 구현 후 구조적 일관성을 위해 실제 게임 로직에는 적용하지 않음
 
 - **예외 처리 학습 적용**
   - try-catch 구문을 Item, UI 처리 로직에 적용
