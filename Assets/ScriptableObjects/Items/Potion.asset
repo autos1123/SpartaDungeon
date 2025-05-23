@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: HealingPotion
   inspectDescription: "\uD68C\uBCF5\uC544\uC774\uD15C\uC774\uB2E4."
-  pickupMessage: Heal! (+30)
+  pickupMessage: "\uD68C\uBCF5! (\uCCB4\uB825 + 30)"
   effectType: 0
   effectValue: 30
   duration: 0

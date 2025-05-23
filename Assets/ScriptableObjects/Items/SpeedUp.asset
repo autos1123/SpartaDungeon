@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SpeedUp
   m_EditorClassIdentifier: 
   itemName: SpeedUp
-  description: "\uC18D\uB3C4\uAC00 \uBE68\uB77C\uC9C4\uB2E4."
-  icon: {fileID: 0}
+  inspectDescription: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00 \uC544\uC774\uD15C\uC774\uB2E4."
+  pickupMessage: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00! (5\uCD08)"
   effectType: 1
-  effectValue: 3
-  duration: 7
+  effectValue: 2
+  duration: 5
