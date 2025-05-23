@@ -7,39 +7,61 @@ public class ObjectScanner : MonoBehaviour
     public Camera playerCamera;
     public InteractableInfoUI ui;
 
-    private InspectableObject currentTarget;
+    private IInteractable currentTarget;
 
     void Update()
     {
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.green);
+        Vector3 origin = playerCamera.transform.position;
+        Vector3 forward = playerCamera.transform.forward;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scanMask))
+        Vector3[] directions =
         {
-            var target = hit.collider.GetComponent<InspectableObject>();
-            if (target != null)
+        forward,
+        Quaternion.Euler(0, -5, 0) * forward,
+        Quaternion.Euler(0, 5, 0) * forward,
+        Quaternion.Euler(-5, 0, 0) * forward,
+        Quaternion.Euler(5, 0, 0) * forward
+    };
+
+        IInteractable foundTarget = null;
+
+        foreach (var dir in directions)
+        {
+            Ray ray = new Ray(origin, dir);
+            Debug.DrawRay(ray.origin, ray.direction * scanRange, Color.yellow);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, scanRange, scanMask))
             {
-                //  아이템이면 itemData의 조사 설명 출력
-                if (target.TryGetComponent(out ItemPickup pickup) && pickup.itemData != null)
+                if (hit.collider.TryGetComponent(out InspectableObject inspectable))
                 {
-                    var item = pickup.itemData;
-                    ui.ShowInfo(item.itemName, item.inspectDescription);
-                }
-                else
-                {
-                    // 일반 InspectableObject용
-                    ui.ShowInfo(target.GetName(), target.GetInspecDescription());
+                    if (inspectable.TryGetComponent(out ItemPickup pickup) && pickup.itemData != null)
+                    {
+                        var item = pickup.itemData;
+                        ui.ShowInfo(item.itemName, item.inspectDescription);
+                    }
+                    else
+                    {
+                        ui.ShowInfo(inspectable.GetName(), inspectable.GetInspecDescription());
+                    }
                 }
 
-                return;
+                if (hit.collider.TryGetComponent(out IInteractable interactable))
+                {
+                    foundTarget = interactable;
+                    break;
+                }
             }
         }
 
-        // Ray가 아무것도 안 맞았을 때만 Hide (1번만 실행됨)
-        if (currentTarget != null)
-        {
-            currentTarget = null;
+        if (foundTarget == null)
             ui.HideInfo();
+
+        currentTarget = foundTarget;
+
+        if (currentTarget != null && Input.GetKeyDown(KeyCode.E))
+        {
+            currentTarget.Interact(gameObject);
         }
     }
+
 }
