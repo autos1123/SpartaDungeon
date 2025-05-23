@@ -122,7 +122,7 @@ public class EventInput : MonoBehaviour {
 - 실전 구조에서는 InputSystem을 직접 코드로 구성하며 안정성 고려
 - SendMessage는 테스트용으로만 사용하였으며, 실전 적용은 UnityEvent 기반 구조 사용
 
-## 📸 스크린샷 (선택 사항)
+## 📸 스크린샷 
 >![image](https://github.com/user-attachments/assets/1bf8a6f5-7cab-4faf-af0f-e5ecaeb8d9f7)
 >
 메인화면
