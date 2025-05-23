@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            TakeDamage(0.3f);
+            TakeDamage(2.2f);
         }
     }
 }
