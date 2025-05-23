@@ -20,16 +20,13 @@ public class ItemUser : MonoBehaviour
             case ItemEffectType.Heal:
                 player.Heal(item.effectValue);
                 break;
-            case ItemEffectType.SpeedBoost:
-                StartCoroutine(SpeedBoost(item.effectValue, item.duration));
-                break;
-            case ItemEffectType.Invincibility:
-                StartCoroutine(Invincibility(item.duration));
+            case ItemEffectType.SpeedUp:
+                StartCoroutine(SpeedUp(item.effectValue, item.duration));
                 break;
         }
     }
 
-    private IEnumerator SpeedBoost(float multiplier, float duration)
+    private IEnumerator SpeedUp(float multiplier, float duration)
     {
         player.moveSpeed *= multiplier;
         yield return new WaitForSeconds(duration);

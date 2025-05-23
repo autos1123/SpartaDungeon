@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -177,5 +178,15 @@ public class PlayerController : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthUI.SetHealth(currentHealth, maxHealth);
+    }
+    public void SpeeUp(float boostAmount, float duration)
+    {
+        StartCoroutine(SpeedUpRoutine(boostAmount, duration));
+    }
+    private IEnumerator SpeedUpRoutine(float amount, float duration)
+    {
+        moveSpeed += amount;
+        yield return new WaitForSeconds(duration);
+        moveSpeed -= amount;
     }
 }
