@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthUI.SetHealth(currentHealth, maxHealth);
+        StartCoroutine(HealthDrainRoutine()); // 초당 체력 감소 시작
     }
 
     private void Update()
@@ -188,5 +189,13 @@ public class PlayerController : MonoBehaviour
         moveSpeed += amount;
         yield return new WaitForSeconds(duration);
         moveSpeed -= amount;
+    }
+    private IEnumerator HealthDrainRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            TakeDamage(0.3f);
+        }
     }
 }
