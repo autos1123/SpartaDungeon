@@ -6,5 +6,6 @@ public enum ItemEffectType
 {
     Heal,
     SpeedUp,
+    Invincibility
 }
 

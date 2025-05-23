@@ -9,26 +9,24 @@ public class InteractableInfoUI : MonoBehaviour
 
     public void ShowInfo(string name, string desc, float duration = 0f)
     {
-        if (infoText == null)
+        try
         {
-            Debug.LogWarning("infoText 연결 안 됨!");
-            return;
+            if (infoText == null)
+                throw new System.NullReferenceException("infoText가 할당되지 않았습니다.");
+
+            infoText.text = $"{name}\n{desc}";
+
+            if (duration > 0f)
+            {
+                if (hideCoroutine != null)
+                    StopCoroutine(hideCoroutine);
+
+                hideCoroutine = StartCoroutine(AutoHide(duration));
+            }
         }
-
-        infoText.text = desc;
-        Debug.Log($"[ShowInfo] {infoText.text} (duration: {duration})");
-
-        // 기존 코루틴이 실행 중이면 중단
-        if (hideCoroutine != null)
+        catch (System.Exception ex)
         {
-            StopCoroutine(hideCoroutine);
-            hideCoroutine = null;
-        }
-
-        // duration이 0보다 크면 자동 숨김 예약
-        if (duration > 0f)
-        {
-            hideCoroutine = StartCoroutine(AutoHide(duration));
+            Debug.LogError($"[InteractableInfoUI] 설명 출력 중 오류 발생: {ex.Message}");
         }
     }
 
