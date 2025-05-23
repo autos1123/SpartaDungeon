@@ -32,11 +32,4 @@ public class ItemUser : MonoBehaviour
         yield return new WaitForSeconds(duration);
         player.moveSpeed /= multiplier;
     }
-
-    private IEnumerator Invincibility(float duration)
-    {
-        player.invincible = true;
-        yield return new WaitForSeconds(duration);
-        player.invincible = false;
-    }
 }
