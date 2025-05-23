@@ -46,7 +46,25 @@ Unity를 사용해 구현한 3D 게임 과제입니다. 기본적인 캐릭터 �
 
 ## 📂 폴더 구조 (간략)
 
-<pre lang="markdown"> ``` Assets/ ├── Externals/ ├── Fonts/ ├── Prefabs/ ├── Scenes/ ├── ScriptableObjects/ │ └── Items/ ├── Scripts/ │ ├── Environment/ │ ├── Interactions/ │ ├── Interface/ │ ├── Items/ │ ├── Managers/ │ ├── Player/ │ └── UI/ ├── TextMesh Pro/ ├── Texture/ └── UI/ Packages/ ``` </pre>
+<pre lang="markdown"> ``` Assets/ 
+  ├── Externals/ 
+  ├── Fonts/ 
+  ├── Prefabs/ 
+  ├── Scenes/
+  ├── ScriptableObjects/ 
+  │ └── Items/ 
+  ├── Scripts/ │ 
+  ├── Environment/ │ 
+  ├── Interactions/ │ 
+  ├── Interface/ │ 
+  ├── Items/ │
+  ├── Managers/ │ 
+  ├── Player/ 
+  │ └── UI/ 
+  ├── TextMesh Pro/ 
+  ├── Texture/ 
+  └── UI/ 
+  Packages/ ``` </pre>
 
 
 ## ⚠️ 유의 사항
@@ -55,13 +73,21 @@ Unity를 사용해 구현한 3D 게임 과제입니다. 기본적인 캐릭터 �
 
 ## 📸 스크린샷 (선택 사항)
 >![image](https://github.com/user-attachments/assets/1bf8a6f5-7cab-4faf-af0f-e5ecaeb8d9f7)
+>
 메인화면
+
 > ![image](https://github.com/user-attachments/assets/f846bdc5-f5b6-4911-9ddf-418d62db0f75)
+> 
 게임화면
+
 > ![image](https://github.com/user-attachments/assets/5812ca06-dab5-489e-9188-da912f73972c)
+> 
 클리어화면
+
 >![image](https://github.com/user-attachments/assets/adedbc00-07e5-4caa-b9c7-45499d80fd80)
+>
 게임오버화면
+
 
 ## 👤 개발자
 - 과제 제출자: 공재원
