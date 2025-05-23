@@ -165,8 +165,18 @@ public class PlayerController : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthUI.SetHealth(currentHealth, maxHealth);
-    }
 
+        IsDead(); // 체력 0 이하일 경우 GameOver 처리
+    }
+    public bool IsDead()
+    {
+        if (currentHealth <= 0)
+        {
+            GameManager.Instance.TriggerGameOver();
+            return true;
+        }
+        return false;
+    }
     void Jump()
     {
         Debug.Log("[PlayerController] Jump() 실행됨");
