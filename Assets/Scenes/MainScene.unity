@@ -1603,7 +1603,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111804757}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13714321, y: -0.000000014760366, z: 0.0000000020435933, w: 0.9905513}
+  m_LocalRotation: {x: 0.13714321, y: 0.000000014760366, z: -0.0000000020435933, w: 0.9905513}
   m_LocalPosition: {x: -3, y: 2.512, z: -38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2775,7 +2775,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC774\uB3D9 : W, A, S, D         \uC810\uD504 : \uC2A4\uD398\uC774\uC2A4\uBC14
     \n\uC0C1\uD638\uC791\uC6A9 : E      \uC7AC\uC2DC\uC791 : R    \uAC8C\uC784\uC885\uB8CC
-    : ESC "
+    : ESC \n        \uBE68\uAC04 \uBC1C\uD310\uC744 \uBC1F\uC73C\uBA74 \uAC8C\uC784
+    \uD074\uB9AC\uC5B4!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a5cbaced742964418bb4cd9cb26b69e, type: 2}
   m_sharedMaterial: {fileID: 871265766549149792, guid: 6a5cbaced742964418bb4cd9cb26b69e, type: 2}
@@ -3609,7 +3610,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226095200}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16018225, y: -0.000000023309845, z: 0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018222, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8700,7 +8701,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825193698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.114129744, y: -0.0000000042734882, z: 4.9093996e-10, w: 0.9934659}
+  m_LocalRotation: {x: 0.114129744, y: 0.000000004273488, z: -4.909399e-10, w: 0.9934659}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19118,7 +19119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796331033}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13714318, y: -1.6784381e-17, z: -2.1570594e-17, w: 0.99055123}
+  m_LocalRotation: {x: 0.13714318, y: 1.6784381e-17, z: 2.1570594e-17, w: 0.99055123}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -22150,7 +22151,7 @@ GameObject:
   - component: {fileID: 2030892206}
   - component: {fileID: 2030892209}
   m_Layer: 0
-  m_Name: Tile (25)
+  m_Name: Finish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22212,7 +22213,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 184600f1f26140b49908f1de886421d9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22251,11 +22252,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2030892204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e229ff60686ffcb4abdcc363097a4210, type: 3}
+  m_Script: {fileID: 11500000, guid: fd65dfdf2419d384895d5dd651851051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 15
-  cooldownTime: 3
 --- !u!1001 &2051691273
 PrefabInstance:
   m_ObjectHideFlags: 0
